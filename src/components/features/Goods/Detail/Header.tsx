@@ -1,5 +1,6 @@
 import { Divider } from '@chakra-ui/react';
 import styled from '@emotion/styled';
+import { useState } from 'react';
 
 import type { ProductDetailRequestParams } from '@/api/hooks/useGetProductDetail';
 import { useGetProductDetail } from '@/api/hooks/useGetProductDetail';
@@ -8,17 +9,26 @@ import { breakpoints } from '@/styles/variants';
 type Props = ProductDetailRequestParams;
 
 export const GoodsDetailHeader = ({ productId }: Props) => {
-  const { data: detail } = useGetProductDetail({ productId });
+  const { data: productDetail } = useGetProductDetail({ productId });
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  const handleFavoriteToggle = () => {
+    setIsFavorited(!isFavorited);
+    alert(isFavorited ? '관심 등록 해제' : '관심 등록 완료');
+  };
 
   return (
     <Wrapper>
-      <GoodsImage src={detail.imageUrl} alt={detail.name} />
+      <ProductImage src={productDetail.imageUrl} alt={productDetail.name} />
       <InfoWrapper>
-        <Title>{detail.name}</Title>
-        <Price>{detail.price}원</Price>
+        <Title>{productDetail.name}</Title>
+        <Price>{productDetail.price}원</Price>
         <Divider color="#f5f5f5" />
         <Notice>카톡 친구가 아니어도 선물 코드로 선물 할 수 있어요!</Notice>
         <Divider color="#f5f5f5" />
+        <FavoriteButton isFavorited={isFavorited} onClick={handleFavoriteToggle}>
+          {isFavorited ? '❤️ 관심 등록 해제' : '🖤 관심 등록'}
+        </FavoriteButton>
       </InfoWrapper>
     </Wrapper>
   );
@@ -34,7 +44,7 @@ const Wrapper = styled.header`
   }
 `;
 
-const GoodsImage = styled.img`
+const ProductImage = styled.img`
   width: 100%;
   max-width: 450px;
 `;
@@ -71,4 +81,22 @@ const Notice = styled.p`
   font-size: 14px;
   font-weight: 700;
   color: #111;
+`;
+
+const FavoriteButton = styled.button<{ isFavorited: boolean }>`
+  margin-top: 16px;
+  padding: 8px 16px;
+  background-color: ${({ isFavorited }) => (isFavorited ? '#ffdddd' : '#f0f0f0')};
+  color: ${({ isFavorited }) => (isFavorited ? 'red' : '#555')};
+  border-radius: 4px;
+  border: 1px solid ${({ isFavorited }) => (isFavorited ? 'red' : '#d2d2d2')};
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border 0.3s ease;
+
+  &:hover {
+    background-color: ${({ isFavorited }) => (isFavorited ? '#ffcccc' : '#e0e0e0')};
+  }
 `;

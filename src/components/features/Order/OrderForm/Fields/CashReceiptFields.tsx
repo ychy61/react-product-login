@@ -19,7 +19,9 @@ export const CashReceiptFields = () => {
         control={control}
         name="hasCashReceipt"
         render={({ field: { onChange, value, ref } }) => (
-          <Checkbox ref={ref} onChange={(e) => {
+          <Checkbox
+            ref={ref}
+            onChange={(e) => {
               setIsChecked(e.target.checked);
               onChange(e);
             }}
@@ -46,7 +48,11 @@ export const CashReceiptFields = () => {
         )}
       />
       <Spacing height={8} />
-      <Input disabled={!isChecked} {...register('cashReceiptNumber')} placeholder="(-없이) 숫자만 입력해주세요." />
+      <Input
+        disabled={!isChecked}
+        {...register('cashReceiptNumber')}
+        placeholder="(-없이) 숫자만 입력해주세요."
+      />
     </Wrapper>
   );
 };
